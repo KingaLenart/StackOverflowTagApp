@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 using StackOverflowTagApp.Core.Services;
 using StackOverflowTagApp.Core.SQL;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +16,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // HttpClient Registration
-builder.Services.AddHttpClient();
+
+builder.Services.AddHttpClient("StackOverflowClient", c =>
+{
+    c.BaseAddress = new Uri("https://api.stackexchange.com/2.3/");
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+});
 builder.Services.AddScoped<StackOverflowReadTagsService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
