@@ -5,13 +5,15 @@ VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackOverflowTagApp.Api", "StackOverflowTagApp.Api\StackOverflowTagApp.Api.csproj", "{C74629FA-67D2-4585-84E7-05A66848BB51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowTagApp.Core.Models", "StackOverflowTagApp.Core.Models\StackOverflowTagApp.Core.Models.csproj", "{273F1A77-A723-41E5-85B5-6860EA447787}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackOverflowTagApp.Core.Models", "StackOverflowTagApp.Core.Models\StackOverflowTagApp.Core.Models.csproj", "{273F1A77-A723-41E5-85B5-6860EA447787}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowTagApp.Core.SQL", "StackOverflowTagApp.Core.SQL\StackOverflowTagApp.Core.SQL.csproj", "{163D9512-DE2B-4EC4-96EC-7FCF17259D81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackOverflowTagApp.Core.SQL", "StackOverflowTagApp.Core.SQL\StackOverflowTagApp.Core.SQL.csproj", "{163D9512-DE2B-4EC4-96EC-7FCF17259D81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowTagApp.Common.Dto", "StackOverflowTagApp.Common.Dto\StackOverflowTagApp.Common.Dto.csproj", "{F7BFCEB1-9826-4491-B5A7-12DB9D82CC01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackOverflowTagApp.Common.Dto", "StackOverflowTagApp.Common.Dto\StackOverflowTagApp.Common.Dto.csproj", "{F7BFCEB1-9826-4491-B5A7-12DB9D82CC01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowTagApp.Core.Services", "StackOverflowTagApp.Core.Services\StackOverflowTagApp.Core.Services.csproj", "{A1DD3A0F-3F79-4808-8E93-6D6096F25F40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackOverflowTagApp.Core.Services", "StackOverflowTagApp.Core.Services\StackOverflowTagApp.Core.Services.csproj", "{A1DD3A0F-3F79-4808-8E93-6D6096F25F40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowTagApp.Core.Mappers", "StackOverflowTagApp.Core.Mappers\StackOverflowTagApp.Core.Mappers.csproj", "{38659477-8A97-49E9-9C28-2DF691CF8EE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A1DD3A0F-3F79-4808-8E93-6D6096F25F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1DD3A0F-3F79-4808-8E93-6D6096F25F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1DD3A0F-3F79-4808-8E93-6D6096F25F40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38659477-8A97-49E9-9C28-2DF691CF8EE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38659477-8A97-49E9-9C28-2DF691CF8EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38659477-8A97-49E9-9C28-2DF691CF8EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38659477-8A97-49E9-9C28-2DF691CF8EE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

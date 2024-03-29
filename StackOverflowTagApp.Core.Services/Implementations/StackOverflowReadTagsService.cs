@@ -1,18 +1,19 @@
-﻿using StackOverflowTagApp.Core.Services.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using StackOverflowTagApp.Core.Models;
+using StackOverflowTagApp.Core.Services.Models;
 using StackOverflowTagApp.Core.SQL;
-using System.ComponentModel;
 using System.Text.Json;
 
-namespace StackOverflowTagApp.Core.Services
+namespace StackOverflowTagApp.Core.Services.Implementations
 {
-    public class StackOverflowReadTagsService
+    public class StackOverflowReadTagsService : TagMapper
     {
         private readonly HttpClient _httpClient;
-        private readonly ApplicationDbContext _context;
-        public StackOverflowReadTagsService(IHttpClientFactory httpClientFactory, ApplicationDbContext context)
+        private readonly TagWriteRepository _tagWriteRepository;
+        public StackOverflowReadTagsService(IHttpClientFactory httpClientFactory, TagWriteRepository tagWriteRepository)
         {
             _httpClient = httpClientFactory.CreateClient("StackOverflowClient");
-            _context = context;
+            _tagWriteRepository = tagWriteRepository;
         }
 
         public async Task<List<StackOverflowTag>> GetTagsAsync()
@@ -22,16 +23,17 @@ namespace StackOverflowTagApp.Core.Services
             var allTags = new List<StackOverflowTag>();
 
             for (int pageNumber = 1; pageNumber <= pageNumberMax; pageNumber++)
-            { 
+            {
                 var tags = await GetTagsPerPageAsync(pageNumber, pageSize);
                 allTags.AddRange(tags);
                 await Task.Delay(1000);
             }
 
+            await _tagWriteRepository.TagCreateAsync(allTags);
             return allTags;
         }
 
-        public async Task<List<StackOverflowTag>> GetTagsPerPageAsync (int pageNumber, int pageSize)
+        public async Task<List<StackOverflowTag>> GetTagsPerPageAsync(int pageNumber, int pageSize)
         {
             var response = await _httpClient.GetAsync($"tags?order=desc&sort=popular&site=stackoverflow&pagesize={pageSize}&page={pageNumber}");
             response.EnsureSuccessStatusCode();
@@ -47,5 +49,7 @@ namespace StackOverflowTagApp.Core.Services
 
             return tagResponse.Items;
         }
+
+       
     }
 }

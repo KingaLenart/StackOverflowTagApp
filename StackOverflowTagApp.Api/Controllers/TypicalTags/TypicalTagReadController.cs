@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StackOverflowTagApp.Core.Services;
+using StackOverflowTagApp.Core.Services.Implementations;
 using StackOverflowTagApp.Core.Services.Models;
 
 namespace StackOverflowTagApp.Api.Controllers.TypicalTags
