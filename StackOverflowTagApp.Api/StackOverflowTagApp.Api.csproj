@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StackOverflowTagApp.Core.Services\StackOverflowTagApp.Core.Services.csproj" />
-    <ProjectReference Include="..\StackOverflowTagApp.Core.SQL\StackOverflowTagApp.Core.SQL.csproj" />
+    <ProjectReference Include="..\StackOverflowTagApp.Core.Application\StackOverflowTagApp.Core.Application.csproj" />
+    <ProjectReference Include="..\StackOverflowTagApp.Core.Infrastucture\StackOverflowTagApp.Core.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

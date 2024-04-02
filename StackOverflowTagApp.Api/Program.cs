@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
-using StackOverflowTagApp.Core.Services.DI;
-using StackOverflowTagApp.Core.Services.Implementations;
+using StackOverflowTagApp.Core.Infrastructure.DI;
 using StackOverflowTagApp.Core.SQL;
 using System.Net;
+using StackOverflowTagApp.Core.Application.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +28,8 @@ builder.Services.AddHttpClient("StackOverflowClient", c =>
 {
     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
 });
-StackOverflowServiceDependencyInjection.AddStackOverflowServices(builder.Services);
+builder.Services.AddStackOverflowServices();
+builder.Services.AddCoreApplicationServices();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

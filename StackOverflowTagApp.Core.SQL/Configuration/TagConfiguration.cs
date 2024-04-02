@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using StackOverflowTagApp.Core.Models;
+using StackOverflowTagApp.Core.Domain;
 
 namespace StackOverflowTagApp.Core.SQL.Configuration
 {

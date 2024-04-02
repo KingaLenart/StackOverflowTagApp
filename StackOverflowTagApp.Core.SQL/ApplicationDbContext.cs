@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StackOverflowTagApp.Core.Models;
 using StackOverflowTagApp.Core.SQL.Configuration;
 
 namespace StackOverflowTagApp.Core.SQL
