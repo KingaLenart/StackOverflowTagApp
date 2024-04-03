@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StackOverflowTagApp.Core.Application.Models;
 using StackOverflowTagApp.Core.Application.Services;
+using StackOverflowTagApp.Core.Domain;
 using StackOverflowTagApp.Core.Infrastructure.StackOverflow.Models;
 using StackOverflowTagApp.Core.Infrastructure.StackOverflow.Services;
 
@@ -26,8 +27,8 @@ public class TagController : ControllerBase
     }
 
     [HttpPost("paged")]
-    public async Task<PagedCollectionOutDto<TagOutDto>> Paged(PagingRequestModel pagingRequestModel)
+    public async Task<PagedCollectionOutDto<TagOutDto>> Paged(SortPagingInfo sortPagingInfo)
     {
-        return await _tagsReadService.GetTagsPageAsync(pagingRequestModel);
+        return await _tagsReadService.GetTagsPageAsync(sortPagingInfo);
     }
 }

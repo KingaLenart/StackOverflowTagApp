@@ -1,70 +1,48 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StackOverflowTagApp.Core.Application.Mappers;
-using StackOverflowTagApp.Core.Application.Models;
+﻿using StackOverflowTagApp.Core.Application.Models;
 using StackOverflowTagApp.Core.Domain;
-using StackOverflowTagApp.Core.SQL;
+using StackOverflowTagApp.Core.Domain.Abstractions;
+using StackOverflowTagApp.Core.Infrastructure.Abstractions;
 
 namespace StackOverflowTagApp.Core.Application.Services;
 
 public class TagsReadService
 {
-    private readonly ApplicationDbContext _context;
-    private readonly DbSet<TagEntity> _tags;
-    private readonly TagMapper _tagMapper;
+    private readonly ITagReadRepository _tagsReadRepository;
+    private readonly IMapper<TagEntity, TagOutDto> _tagMapper;
 
-    public TagsReadService(ApplicationDbContext context, TagMapper tagMapper)
+    public TagsReadService(ITagReadRepository readRepository , IMapper<TagEntity, TagOutDto> tagMapper)
     {
-        _context = context;
-        _tags = _context.Set<TagEntity>();
+        _tagsReadRepository = readRepository;
         _tagMapper = tagMapper;
     }
 
-    public async Task<PagedCollectionOutDto<TagOutDto>> GetTagsPageAsync(PagingRequestModel pagingRequestModel)
+    public async Task<PagedCollectionOutDto<TagOutDto>> GetTagsPageAsync(SortPagingInfo sortPagingInfo)
     {
-        if (pagingRequestModel.PageNumber <= 0)
+        if (sortPagingInfo.PageNumber <= 0)
         {
-            throw new Exception("Invalid page number. Please enter a value greater than zero to proceed.");
+            throw new ArgumentException("Invalid page number. Please enter a value greater than zero to proceed.");
         }
 
-        var query = _tags.AsQueryable();
+        var orderBy = sortPagingInfo.OrderBy.ToLower();
 
-        switch (pagingRequestModel.OrderBy?.ToLower())
+        if(!string.IsNullOrWhiteSpace(orderBy) && !(orderBy == "name" || orderBy == "percentageoftags"))
         {
-            case "name":
-
-                query = pagingRequestModel.SortDirection == SortDirection.Ascending
-                    ? query.OrderBy(t => t.Name)
-                    : query.OrderByDescending(t => t.Name);
-                break;
-
-            case "percentageOfTags":
-
-                query = pagingRequestModel.SortDirection == SortDirection.Ascending
-                    ? query.OrderBy(t => t.PercentageOfTags)
-                    : query.OrderByDescending(t => t.PercentageOfTags);
-                break;
-
+            throw new ArgumentException("The 'orderBy' parameter value is not supported. Please use 'name' or 'percentageoftags' for sorting.");
         }
 
-        var list = await query
-            .Skip((pagingRequestModel.PageNumber - 1) * 100)
-            .Take(pagingRequestModel.PageSize)
-            .ToListAsync();
-
-        var mappedList = list.Select(_tagMapper.MapTag).ToList();
-
-        var totalCount = await query.CountAsync();
+        var list = await _tagsReadRepository.GetPagedTagsAsync(sortPagingInfo);
+        var mappedList = list.Select(_tagMapper.Map).ToList();
+        var totalCount = await _tagsReadRepository.GetTotalCountAsync();
 
         var pageCollectionOutDto = new PagedCollectionOutDto<TagOutDto>
         {
-            PageNumber = pagingRequestModel.PageNumber,
-            PageSize = pagingRequestModel.PageSize,
+            PageNumber = sortPagingInfo.PageNumber,
+            PageSize = sortPagingInfo.PageSize,
             TotalCount = totalCount,
-            TotalPage = totalCount / pagingRequestModel.PageSize,
+            TotalPage = (int)Math.Ceiling((double)totalCount / sortPagingInfo.PageSize),
             Collection = mappedList
         };
 
         return pageCollectionOutDto;
-
     }
 }

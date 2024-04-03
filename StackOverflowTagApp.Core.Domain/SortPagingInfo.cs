@@ -1,9 +1,8 @@
-﻿namespace StackOverflowTagApp.Core.Application.Models;
+﻿namespace StackOverflowTagApp.Core.Domain;
 
-public class PagingRequestModel
+public class SortPagingInfo
 {
-    const int maxPageSize = 10;
-
+    const int maxPageSize = 100;
     public int PageNumber { get; set; }
 
     private int pageSize;

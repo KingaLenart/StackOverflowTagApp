@@ -1,4 +1,4 @@
-﻿namespace StackOverflowTagApp.Core.Application.Models;
+﻿namespace StackOverflowTagApp.Core.Domain;
 
 public enum SortDirection
 {

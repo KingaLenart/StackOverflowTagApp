@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StackOverflowTagApp.Core.Domain;
-using StackOverflowTagApp.Core.Infrastructure.StackOverflow.Mappers;
+using StackOverflowTagApp.Core.Infrastructure.Abstractions;
 using StackOverflowTagApp.Core.Infrastructure.StackOverflow.Models;
 using StackOverflowTagApp.Core.SQL;
 
@@ -9,19 +9,19 @@ public class TagWriteRepository
 {
     private readonly DbSet<TagEntity> tagDbSet;
     private readonly ApplicationDbContext _context;
-    private readonly StackOverflowTagMapper tagMapper;
+    private readonly IMapper<StackOverflowTag, double, TagEntity> _tagMapper;
 
-    public TagWriteRepository(ApplicationDbContext context, StackOverflowTagMapper tagMapper)
+    public TagWriteRepository(ApplicationDbContext context, IMapper<StackOverflowTag, double, TagEntity> tagMapper)
     {
         _context = context;
-        this.tagMapper = tagMapper;
+        _tagMapper = tagMapper;
         tagDbSet = _context.Set<TagEntity>();
     }
 
     public async Task CreateTagAsync(List<StackOverflowTag> stackOverflowTags)
     {
         var populationSum = stackOverflowTags.Sum(tag => tag.Count);
-        var tagEntities = stackOverflowTags.Select(tag => tagMapper.MapTag(tag, populationSum));
+        var tagEntities = stackOverflowTags.Select(tag => _tagMapper.Map(tag, populationSum));
 
         var existingTagEntities = await tagDbSet.ToListAsync();
 
