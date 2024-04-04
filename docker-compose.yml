@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  stackoverflowtagappapi:
+    build: 
+      context: .
+      dockerfile: StackOverflowTagApp.Api/Dockerfile
+    ports:
+      - "8000:8080"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__SQL=Server=host.docker.internal,1433;Database=stackoverflow-dev;User Id=sa;Password=Szklanka123;MultipleActiveResultSets=true;Encrypt=False;
+
+  db:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Szklanka123"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: [ "CMD", "sqlcmd", "-U", "sa", "-P", "Szklanka123", "-Q", "SELECT 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mssql-data:     

@@ -4,6 +4,7 @@ using StackOverflowTagApp.Core.SQL;
 using System.Net;
 using StackOverflowTagApp.Core.Application.DI;
 using StackOverflowTagApp.Core.Infrastructure.ExceptionHandling;
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,9 +43,11 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await EnsureDatabaseIsAvailable(dbContext);
     dbContext.Database.Migrate();
 }
 
@@ -64,3 +67,28 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Docker compose - ensures API waits for SQL Server readiness, preventing startup errors
+async Task EnsureDatabaseIsAvailable(ApplicationDbContext dbContext)
+{
+    var timeOut = TimeSpan.FromSeconds(30);
+    var connected = false;
+    var startTime = DateTime.UtcNow;
+    while (!connected)
+    {
+        if (DateTime.UtcNow - startTime > timeOut)
+        {
+            throw new TimeoutException("Timeout waiting for database to become available.");
+        }
+        try
+        {
+            await dbContext.Database.ExecuteSqlRawAsync("SELECT 1");
+            connected = true;
+        }
+        catch (SqlException)
+        {
+            Console.WriteLine("Waiting for database to become available...");
+            await Task.Delay(5000);
+        }
+    }
+}
