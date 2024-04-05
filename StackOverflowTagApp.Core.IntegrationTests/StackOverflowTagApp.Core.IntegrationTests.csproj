@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.3" />
+	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NUnit" Version="4.1.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
@@ -17,10 +19,11 @@
   <ItemGroup>
   	<Using Include="NUnit.Framework" />
   </ItemGroup>
-	
+
   <ItemGroup>
-    <ProjectReference Include="..\StackOverflowTagApp.Core.Application\StackOverflowTagApp.Core.Application.csproj" />
-    <ProjectReference Include="..\StackOverflowTagApp.Core.Domain\StackOverflowTagApp.Core.Domain.csproj" />
+    <ProjectReference Include="..\StackOverflowTagApp.Api\StackOverflowTagApp.Api.csproj" />
+    <ProjectReference Include="..\StackOverflowTagApp.Core.Infrastucture\StackOverflowTagApp.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\StackOverflowTagApp.Core.SQL\StackOverflowTagApp.Core.SQL.csproj" />
   </ItemGroup>
 
 </Project>
