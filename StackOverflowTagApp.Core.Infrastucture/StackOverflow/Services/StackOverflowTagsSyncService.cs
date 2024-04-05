@@ -17,7 +17,7 @@ public class StackOverflowTagsSyncService
 
     public async Task<List<StackOverflowTag>> SyncTagsAsync()
     {
-        int pageNumberMax = 4;
+        int pageNumberMax = 10;
         int pageSize = 100;
         var allTags = new List<StackOverflowTag>();
 

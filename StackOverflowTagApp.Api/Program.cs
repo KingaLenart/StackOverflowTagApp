@@ -44,12 +44,7 @@ builder.Services.AddProblemDetails();
 var app = builder.Build();
 
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await EnsureDatabaseIsAvailable(dbContext);
-    dbContext.Database.Migrate();
-}
+await EnsureDatabaseReadyAndMigrate();
 
 // HTTP request pipeline configuration.
 if (app.Environment.IsDevelopment())
@@ -69,12 +64,16 @@ app.MapControllers();
 app.Run();
 
 // Docker compose - ensures API waits for SQL Server readiness, preventing startup errors
-async Task EnsureDatabaseIsAvailable(ApplicationDbContext dbContext)
+async Task EnsureDatabaseReadyAndMigrate()
 {
+    using var scope = app.Services.CreateScope();
+
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
     var timeOut = TimeSpan.FromSeconds(30);
-    var connected = false;
+    var migrated = false;
     var startTime = DateTime.UtcNow;
-    while (!connected)
+    while (!migrated)
     {
         if (DateTime.UtcNow - startTime > timeOut)
         {
@@ -82,10 +81,10 @@ async Task EnsureDatabaseIsAvailable(ApplicationDbContext dbContext)
         }
         try
         {
-            await dbContext.Database.ExecuteSqlRawAsync("SELECT 1");
-            connected = true;
+            dbContext.Database.Migrate();
+            migrated = true;
         }
-        catch (SqlException)
+        catch (Exception)
         {
             Console.WriteLine("Waiting for database to become available...");
             await Task.Delay(5000);

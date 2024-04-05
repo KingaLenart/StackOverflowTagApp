@@ -18,5 +18,6 @@ public static class StackOverflowServiceDependencyInjection
         services.AddScoped<StackOverflowTagMapper>();
         services.AddScoped<ITagReadRepository, TagReadRepository>();
         services.AddScoped<IMapper<StackOverflowTag, double, TagEntity>, StackOverflowTagMapper>();
+        services.AddHostedService<StackOverflowTagsSyncHostedService>();
     }
 }
